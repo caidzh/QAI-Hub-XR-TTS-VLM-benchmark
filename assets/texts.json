@@ -1,0 +1,5 @@
+{
+  "short": "Hello from Qualcomm AI Hub.",
+  "medium": "This benchmark measures text to speech model latency on a mobile Qualcomm processor.",
+  "long": "An augmented reality assistant must generate clear speech with sufficiently low latency while leaving enough compute resources for tracking, rendering, and scene understanding."
+}

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_dir"
+uv run python -m xrbench tts all --config configs/tts_piper.yaml "$@"

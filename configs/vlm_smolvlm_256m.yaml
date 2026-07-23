@@ -1,0 +1,17 @@
+vlm:
+  model_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
+  sample_image: "assets/sample_vlm.jpg"
+  prompt: "Describe the important objects and actions in this image."
+  target_runtime: "qnn_dlc"
+  prompt_lengths: [32, 64, 128]
+  decode_context_lengths: [32, 64, 128, 256]
+  decode_query_length: 1
+  stages:
+    - vision_encoder
+    - vision_projector
+    - language_prefill
+    - language_decode
+
+precision:
+  modes:
+    - float

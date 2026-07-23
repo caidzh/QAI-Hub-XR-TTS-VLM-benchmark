@@ -1,0 +1,73 @@
+device:
+  requested_name: "Samsung Galaxy S22 5G"
+  allow_s22_family_fallback: true
+  allow_unrelated_fallback: false
+
+paths:
+  output_root: "outputs"
+  cache_dir: null
+
+remote:
+  timeout_seconds: 3600
+  retries: 2
+  retry_backoff_seconds: 5
+  skip_inference: false
+  skip_download: false
+
+precision:
+  modes:
+    - float
+
+report:
+  generation_output_tokens:
+    - 8
+    - 16
+    - 32
+    - 64
+
+validation:
+  atol: 0.001
+  rtol: 0.01
+  top_k: 5
+  save_full_kv_cache: false
+
+tts:
+  model_id: "pipertts_en"
+  target_runtime: "voice_ai"
+  sentences_file: "assets/texts.json"
+  required_components:
+    - encoder
+    - sdp
+    - flow
+    - decoder
+    - charsiu_encoder
+    - charsiu_decoder
+
+vlm:
+  model_id: "HuggingFaceTB/SmolVLM-256M-Instruct"
+  sample_image: "assets/sample_vlm.jpg"
+  prompt: "Describe the important objects and actions in this image."
+  target_runtime: "qnn_dlc"
+  prompt_lengths:
+    - 32
+    - 64
+    - 128
+  decode_context_lengths:
+    - 32
+    - 64
+    - 128
+    - 256
+  decode_query_length: 1
+  stages:
+    - vision_encoder
+    - vision_projector
+    - language_prefill
+    - language_decode
+  export_preference:
+    - pt2
+    - onnx
+
+quantization:
+  enabled: false
+  calibration_samples: 8
+  require_real_data: true

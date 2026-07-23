@@ -1,0 +1,88 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qaihub-xr-latency-bench"
+version = "0.1.0"
+description = "Reproducible Qualcomm AI Hub component latency benchmarks for PiperTTS and SmolVLM"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10,<3.12"
+authors = [{ name = "XRBench contributors" }]
+dependencies = [
+  "numpy>=1.26,<3",
+  "PyYAML>=6.0.2,<7",
+  "qai-hub>=0.53,<0.54",
+]
+
+[project.optional-dependencies]
+tts = [
+  "qai-hub-models[pipertts-en]>=0.58,<0.59",
+  "soundfile==0.13.1",
+]
+vlm = [
+  "Pillow>=10,<13",
+  "onnx>=1.17,<1.19",
+  "onnxruntime>=1.19,<1.23",
+  "torch>=2.4,<2.12",
+  "transformers>=4.57,<5",
+]
+dev = [
+  "mypy>=1.15,<2",
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<8",
+  "ruff>=0.11,<0.15",
+  "types-PyYAML>=6.0.12,<7",
+]
+
+[project.scripts]
+xrbench = "xrbench.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xrbench"]
+
+[tool.uv]
+# The official PiperTTS extra pins Transformers 4.45, while SmolVLM requires a
+# newer Transformers release. uv records both reproducible forks in one
+# lockfile and prevents accidentally selecting both in one environment.
+conflicts = [
+  [
+    { extra = "tts" },
+    { extra = "vlm" },
+  ],
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+markers = [
+  "slow: requires a model download or optional heavyweight dependencies",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src"]
+warn_unused_ignores = false
+exclude = ["src/xrbench/vlm/wrappers.py"]
+
+[[tool.mypy.overrides]]
+module = [
+  "PIL.*",
+  "qai_hub.*",
+  "qai_hub_models.*",
+  "torch.*",
+  "transformers.*",
+  "soundfile.*",
+]
+ignore_missing_imports = true

@@ -1,0 +1,15 @@
+tts:
+  model_id: "pipertts_en"
+  target_runtime: "voice_ai"
+  sentences_file: "assets/texts.json"
+  required_components:
+    - encoder
+    - sdp
+    - flow
+    - decoder
+    - charsiu_encoder
+    - charsiu_decoder
+
+precision:
+  modes:
+    - float
